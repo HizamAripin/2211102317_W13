@@ -1,12 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 
-// Redirect root URL ke daftar produk
 Route::get('/', function () {
-    return redirect()->route('products.index');
+    return view('welcome');
 });
 
-// Resource controller
+Route::get('/dashboard', function () {
+    return view('dashboard');
+});
+
 Route::resource('products', ProductController::class);
