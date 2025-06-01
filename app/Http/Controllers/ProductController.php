@@ -7,71 +7,67 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-    // UNTUK MENAMPILKAN HALAMAN UTAMA PRODUCTS
-    public function index() 
-    { 
-        $products = Product::all(); 
-        return view('products.index', ['products' => $products]); 
-    } 
- 
-    // UNTUK MENAMPILKAN FORMULIR MEMBUAT DATA BARU
-    public function create() 
-    { 
-        return view('products.form', [ 
-            'title' => 'Tambah', 
-            'product' => new Product(), 
-            'route' => route('products.store'), 
-            'method' => 'POST', 
-        ]); 
-    } 
- 
-    // UNTUK MENYIMPAN DATA BARU
-    public function store(Request $request) 
-    { 
-        $validated = $request->validate([ 
-            'name' => 'required|min:4', 
-            'price' => 'required|integer|min:1000000', 
-        ]); 
- 
-        Product::create($validated); 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan'); 
-    } 
- 
-    // UNTUK MENAMPILKAN DETAIL SUATU DATA PRODUK
-    public function show(Product $product) 
-    { 
-        return view('products.show', compact('product')); 
-    } 
- 
-    // UNTUK MENAMPILKAN FORMULIR EDIT
-    public function edit(Product $product) 
-    { 
-        return view('products.form', [ 
-            'title' => 'Edit', 
-            'product' => $product, 
-            'route' => route('products.update', $product), 
-            'method' => 'PUT', 
-        ]); 
-    } 
- 
-    // UNTUK MENYIMPAN PERUBAHAN SUATU DATA PRODUK YANG BARU DIEDIT
-    public function update(Request $request, Product $product) 
-    { 
-        $validated = $request->validate([ 
-            'name' => 'required|min:4', 
-            'price' => 'required|integer|min:1000000', 
-        ]); 
- 
-        $product->update($validated); 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil 
-diperbarui'); 
-    } 
- 
-    // UNTUK MENGHAPUS DATA PRODUK
-    public function destroy(Product $product) 
-    { 
-        $product->delete(); 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil 
-dihapus'); 
-    } 
+    // Tampilkan halaman daftar produk
+    public function index()
+    {
+        $products = Product::all();
+        return view('products.index', compact('products'));
+    }
+
+    // Tampilkan form tambah produk
+    public function create()
+    {
+        return view('products.form', [
+            'product' => new Product()
+        ]);
+    }
+
+    // Simpan data produk baru
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|min:4',
+            'price' => 'required|integer|min:1000000',
+        ]);
+
+        Product::create($validated);
+
+        return redirect()->route('products.index')
+                         ->with('sukses', 'Selamat! Berhasil menambahkan data.');
+    }
+
+    // Tampilkan detail produk
+    public function show(Product $product)
+    {
+        return view('products.show', compact('product'));
+    }
+
+    // Tampilkan form edit produk
+    public function edit(Product $product)
+    {
+        return view('products.form', compact('product'));
+    }
+
+    // Update data produk
+    public function update(Request $request, Product $product)
+    {
+        $validated = $request->validate([
+            'name' => 'required|min:4',
+            'price' => 'required|integer|min:1000000',
+        ]);
+
+        $product->update($validated);
+
+        return redirect()->route('products.index')
+                         ->with('sukses', 'Produk berhasil diperbarui.');
+    }
+
+    // Hapus data produk
+    public function destroy(Product $product)
+    {
+        $product->delete();
+
+        return redirect()->route('products.index')
+                         ->with('sukses', 'Produk berhasil dihapus.');
+    }
 }
